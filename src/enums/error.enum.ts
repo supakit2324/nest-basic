@@ -1,2 +1,5 @@
-enum EError {}
+enum EError {
+  USERNAME_NOT_FOUND = 'username not found',
+  USERNAME_ALREADY_EXIST = 'username already exists',
+}
 export default EError;

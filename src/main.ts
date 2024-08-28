@@ -5,6 +5,7 @@ import timezone from 'dayjs/plugin/timezone';
 import utc from 'dayjs/plugin/utc';
 import { ConfigService } from '@nestjs/config';
 import { Logger } from '@nestjs/common';
+import { setupSwagger } from './swagger';
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
@@ -14,6 +15,8 @@ async function bootstrap() {
   const configService = app.get<ConfigService>(ConfigService);
   const port = configService.get('port');
   const logger = new Logger();
+
+  setupSwagger(app);
 
   await app.listen(port, () => {
     logger.log(`
