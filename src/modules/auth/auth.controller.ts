@@ -7,6 +7,7 @@ import {
   UseGuards,
 } from '@nestjs/common'
 import { ApiBody } from '@nestjs/swagger'
+import { seconds, SkipThrottle, Throttle } from '@nestjs/throttler'
 import { tryit } from 'radash'
 
 import { LoginDto } from './dtos/login.dto'
@@ -21,11 +22,14 @@ import CommonResponse from '../../decorators/common-response.decorator'
 import { User } from '../../decorators/user.decorator'
 import EError from '../../enums/error.enum'
 
+@SkipThrottle()
 @Controller('auth')
 export class AuthController {
   private readonly logger = new Logger(AuthController.name)
   constructor(private readonly loginUseCase: LoginUseCase) {}
 
+  @SkipThrottle({ default: false })
+  @Throttle({ default: { limit: 3, ttl: seconds(1) } })
   @Post()
   @UseGuards(LocalAuthGuard)
   @CommonResponse('Auth', {
