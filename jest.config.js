@@ -11,4 +11,4 @@ module.exports = {
   testPathIgnorePatterns: ['<rootDir>/node_modules/'],
   moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx', 'json'],
   collectCoverage: false,
-};
+}

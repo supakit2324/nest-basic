@@ -4,6 +4,7 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { mongooseModuleAsyncOptions } from '../../mongoose/mongoose.providers';
 import { ConfigModule } from '@nestjs/config';
 import configuration from '../../config/configuration';
+import { AuthModule } from '../auth/auth.module';
 import { UsersModule } from '../users/users.module';
 
 @Module({
@@ -13,6 +14,7 @@ import { UsersModule } from '../users/users.module';
       isGlobal: true,
     }),
     MongooseModule.forRootAsync(mongooseModuleAsyncOptions),
+    AuthModule,
     HealthzModule,
     UsersModule,
   ],
