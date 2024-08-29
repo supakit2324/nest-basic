@@ -6,7 +6,6 @@ import {
 } from '@nestjs/common';
 import { GetUserByUsernameUseCase } from '../use-case/get-user-by-username.use-case';
 import { tryit } from 'radash';
-import { IUser } from '../interfaces/user.interface';
 import EError from '../../../enums/error.enum';
 import { CreateUserDto } from '../dtos/create-user.dto';
 import { ConfigService } from '@nestjs/config';
@@ -20,7 +19,7 @@ export class CreateUserTransformPipe implements PipeTransform {
     private readonly getUserByUsernameUseCase: GetUserByUsernameUseCase,
   ) {}
 
-  async transform(body: CreateUserDto): Promise<IUser> {
+  async transform(body: CreateUserDto): Promise<CreateUserDto> {
     const { username, password } = body;
     const [err, user] = await tryit(this.getUserByUsernameUseCase.execute)(
       username,
@@ -44,9 +43,6 @@ export class CreateUserTransformPipe implements PipeTransform {
     const hashSize = this.configService.get<number>('authentication.hashSize');
     const hashedPassword = await bcrypt.hash(password, hashSize);
 
-    return {
-      username,
-      password: hashedPassword,
-    };
+    return { ...body, password: hashedPassword };
   }
 }
