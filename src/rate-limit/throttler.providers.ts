@@ -16,6 +16,12 @@ export const throttlerAsyncOptions: ThrottlerAsyncOptions = {
       host: configService.get<string>('redis.host'),
       db: configService.get<number>('redis.db') || 0,
     }),
+    throttlers: [
+      {
+        ttl: 1,
+        limit: 100,
+      },
+    ],
   }),
 }
 

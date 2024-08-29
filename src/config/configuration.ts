@@ -23,4 +23,4 @@ export default (): any => ({
       w: 'majority',
     },
   },
-});
+})
