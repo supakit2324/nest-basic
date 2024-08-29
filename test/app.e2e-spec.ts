@@ -9,7 +9,7 @@ import { AppModule } from '../src/modules/app/app.module'
 describe('AppController (e2e)', () => {
   let app: INestApplication
 
-  beforeAll(async () => {
+  beforeEach(async () => {
     const moduleFixture: TestingModule = await Test.createTestingModule({
       imports: [
         ConfigModule.forRoot({
