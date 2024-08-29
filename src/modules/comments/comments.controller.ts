@@ -30,6 +30,8 @@ import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard'
 import { Posts } from '../posts/schemas/posts.schema'
 import { IUser } from '../users/interfaces/user.interface'
 
+import { CacheDuration } from '../../constants'
+import { CommonCacheDecorator } from '../../decorators/common-cache.decorator'
 import CommonResponse from '../../decorators/common-response.decorator'
 import { User } from '../../decorators/user.decorator'
 
@@ -81,6 +83,7 @@ export class CommentsController {
     return comment
   }
 
+  @CommonCacheDecorator(CacheDuration.THIRTY_SECONDS)
   @Get(':objectId/')
   @ApiParam({
     name: 'objectId',
@@ -95,6 +98,7 @@ export class CommentsController {
     return comment
   }
 
+  @CommonCacheDecorator(CacheDuration.THIRTY_SECONDS)
   @Get(':postsId/posts/')
   @ApiParam({
     name: 'postsId',

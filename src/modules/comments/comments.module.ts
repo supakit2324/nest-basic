@@ -1,3 +1,4 @@
+import { CacheModule } from '@nestjs/cache-manager'
 import { Module } from '@nestjs/common'
 import { MongooseModule } from '@nestjs/mongoose'
 
@@ -13,6 +14,7 @@ import { PostsModule } from '../posts/posts.module'
 
 import { MONGOOSE_CONNECTION_NAME } from '../../constants'
 import { mongooseModels } from '../../mongoose/mongoose.providers'
+import CacheModuleOptions from '../../redis-cache/redis-cache-options'
 
 const service = [CommentsService]
 const useCase = [
@@ -25,6 +27,7 @@ const useCase = [
 
 @Module({
   imports: [
+    CacheModule.registerAsync(CacheModuleOptions),
     MongooseModule.forFeature(mongooseModels, MONGOOSE_CONNECTION_NAME),
     PostsModule,
   ],
