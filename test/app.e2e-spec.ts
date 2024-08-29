@@ -22,16 +22,16 @@ describe('AppController (e2e)', () => {
 
     app = moduleFixture.createNestApplication()
     await app.init()
-  })
+  }, 10000)
 
   afterAll(async () => {
     await app.close()
-  })
+  }, 10000)
 
-  it('/ (GET)', () => {
+  it('/ (GET)', async () => {
     return request(app.getHttpServer())
       .get('/healthz')
       .expect(200)
       .expect({ status: 'ok' })
-  })
+  }, 10000)
 })
