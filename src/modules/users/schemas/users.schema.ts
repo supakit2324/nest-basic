@@ -46,7 +46,6 @@ export class Users extends Document {
   })
   status?: string;
 
-  _id?: string;
   createdAt?: Date;
   updatedAt?: Date;
 }
