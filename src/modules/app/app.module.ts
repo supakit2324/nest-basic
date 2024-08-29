@@ -1,3 +1,4 @@
+import { CacheModule } from '@nestjs/cache-manager'
 import { Module } from '@nestjs/common'
 import { ConfigModule } from '@nestjs/config'
 import { MongooseModule } from '@nestjs/mongoose'
@@ -10,7 +11,10 @@ import { UsersModule } from '../users/users.module'
 
 import configuration from '../../config/configuration'
 import { mongooseModuleAsyncOptions } from '../../mongoose/mongoose.providers'
-import { throttlerAsyncOptions } from '../../rate-limit/throttler.providers'
+import {
+  throttlerAsyncOptions,
+  throttlerServiceProvider,
+} from '../../rate-limit/throttler.providers'
 
 @Module({
   imports: [
@@ -25,5 +29,6 @@ import { throttlerAsyncOptions } from '../../rate-limit/throttler.providers'
     UsersModule,
     PostsModule,
   ],
+  providers: [throttlerServiceProvider],
 })
 export class AppModule {}

@@ -10,6 +10,7 @@ import {
   UseGuards,
 } from '@nestjs/common'
 import { ApiBearerAuth, ApiBody, ApiParam, ApiQuery } from '@nestjs/swagger'
+import { seconds, SkipThrottle, Throttle } from '@nestjs/throttler'
 import { tryit } from 'radash'
 
 import { CreateUserDto } from './dtos/create-user.dto'
@@ -33,6 +34,7 @@ import { User } from '../../decorators/user.decorator'
 import EError from '../../enums/error.enum'
 import { RolesGuard } from '../../guards/roles.guard'
 
+@SkipThrottle()
 @Controller('users')
 export class UsersController {
   private readonly logger = new Logger(UsersController.name)
@@ -42,6 +44,8 @@ export class UsersController {
     private readonly updateUserStatusUseCase: UpdateUserStatusUseCase,
   ) {}
 
+  @SkipThrottle({ default: false })
+  @Throttle({ default: { limit: 3, ttl: seconds(1) } })
   @Post()
   @CommonResponse('Users', {
     name: 'create user',
@@ -100,6 +104,8 @@ export class UsersController {
     return user
   }
 
+  @SkipThrottle({ default: false })
+  @Throttle({ default: { limit: 3, ttl: seconds(1) } })
   @Put()
   @ApiBearerAuth()
   @UseGuards(JwtAuthGuard)
@@ -135,6 +141,8 @@ export class UsersController {
     return userUpdated
   }
 
+  @SkipThrottle({ default: false })
+  @Throttle({ default: { limit: 3, ttl: seconds(1) } })
   @Roles([UserRoleEnum.ADMIN])
   @Put(':username/status')
   @ApiBearerAuth()
