@@ -1,8 +1,10 @@
-import { Injectable } from '@nestjs/common';
-import { InjectModel } from '@nestjs/mongoose';
-import { Posts } from './schemas/posts.schema';
-import { Model } from 'mongoose';
-import { MONGOOSE_CONNECTION_NAME } from '../../constants';
+import { Injectable } from '@nestjs/common'
+import { InjectModel } from '@nestjs/mongoose'
+import { Model } from 'mongoose'
+
+import { Posts } from './schemas/posts.schema'
+
+import { MONGOOSE_CONNECTION_NAME } from '../../constants'
 
 @Injectable()
 export class PostsService {
@@ -12,6 +14,6 @@ export class PostsService {
   ) {}
 
   create = async (payload: Posts): Promise<Posts> => {
-    return this.postsModel.create(payload);
-  };
+    return this.postsModel.create(payload)
+  }
 }

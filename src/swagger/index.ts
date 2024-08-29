@@ -1,5 +1,5 @@
-import { INestApplication } from '@nestjs/common';
-import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+import { INestApplication } from '@nestjs/common'
+import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger'
 
 export const setupSwagger = (app: INestApplication): void => {
   const options = new DocumentBuilder()
@@ -9,12 +9,12 @@ export const setupSwagger = (app: INestApplication): void => {
     .addBearerAuth()
     .addServer('')
     .addServer('/api')
-    .build();
+    .build()
 
-  const document = SwaggerModule.createDocument(app, options);
+  const document = SwaggerModule.createDocument(app, options)
   SwaggerModule.setup('/docs', app, document, {
     swaggerOptions: {
       persistAuthorization: true,
     },
-  });
-};
+  })
+}

@@ -8,31 +8,34 @@ import {
   Put,
   Query,
   UseGuards,
-} from '@nestjs/common';
-import { CreateUserUseCase } from './use-case/create-user.use-case';
-import { CreateUserDto } from './dtos/create-user.dto';
-import { Users } from './schemas/users.schema';
-import { CreateUserTransformPipe } from './pipes/create-user-transform.pipe';
-import { tryit } from 'radash';
-import CommonResponse from '../../decorators/validate/common-response.decorator';
-import { UserEntity } from './entities/user.entity';
-import EError from '../../enums/error.enum';
-import { User } from '../../decorators/user.decorator';
-import { IUser } from './interfaces/user.interface';
-import { ApiBearerAuth, ApiBody, ApiParam, ApiQuery } from '@nestjs/swagger';
-import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
-import { GetUserByUsernameValidatePipe } from './pipes/get-user-by-username-validate.pipe';
-import { Roles } from '../../decorators/roles.decorator';
-import { RolesGuard } from '../../guards/roles.guard';
-import { UserRoleEnum } from './enums/user-role.enum';
-import { UpdateUserValidatePipe } from './pipes/update-user-validate.pipe';
-import { UpdateUserUseCase } from './use-case/update-user.use-case';
-import { UpdateUserStatusUseCase } from './use-case/update-user-status.use.case';
-import { UserStatusEnum } from './enums/user-status.enum';
+} from '@nestjs/common'
+import { ApiBearerAuth, ApiBody, ApiParam, ApiQuery } from '@nestjs/swagger'
+import { tryit } from 'radash'
+
+import { CreateUserDto } from './dtos/create-user.dto'
+import { UserEntity } from './entities/user.entity'
+import { UserRoleEnum } from './enums/user-role.enum'
+import { UserStatusEnum } from './enums/user-status.enum'
+import { IUser } from './interfaces/user.interface'
+import { CreateUserTransformPipe } from './pipes/create-user-transform.pipe'
+import { GetUserByUsernameValidatePipe } from './pipes/get-user-by-username-validate.pipe'
+import { UpdateUserValidatePipe } from './pipes/update-user-validate.pipe'
+import { Users } from './schemas/users.schema'
+import { CreateUserUseCase } from './use-case/create-user.use-case'
+import { UpdateUserStatusUseCase } from './use-case/update-user-status.use.case'
+import { UpdateUserUseCase } from './use-case/update-user.use-case'
+
+import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard'
+
+import CommonResponse from '../../decorators/common-response.decorator'
+import { Roles } from '../../decorators/roles.decorator'
+import { User } from '../../decorators/user.decorator'
+import EError from '../../enums/error.enum'
+import { RolesGuard } from '../../guards/roles.guard'
 
 @Controller('users')
 export class UsersController {
-  private readonly logger = new Logger(UsersController.name);
+  private readonly logger = new Logger(UsersController.name)
   constructor(
     private readonly createUserUseCase: CreateUserUseCase,
     private readonly updateUserUseCase: UpdateUserUseCase,
@@ -48,23 +51,23 @@ export class UsersController {
   async createUser(
     @Body(CreateUserTransformPipe) body: CreateUserDto,
   ): Promise<Users> {
-    const { username, password, key } = body;
+    const { username, password, key } = body
     const [err, user] = await tryit(this.createUserUseCase.execute)({
       create: {
         username,
         password,
       },
       key,
-    });
+    })
     if (err) {
       this.logger.error(
         `Catch on createUserUseCase: ${JSON.stringify(
           body,
         )}, error: ${err.message ?? JSON.stringify(err)}`,
-      );
+      )
     }
 
-    return user;
+    return user
   }
 
   @Get('me')
@@ -76,7 +79,7 @@ export class UsersController {
     error400: [EError.USERNAME_NOT_FOUND],
   })
   async getMe(@User() user: IUser): Promise<UserEntity> {
-    return user;
+    return user
   }
 
   @Roles([UserRoleEnum.ADMIN])
@@ -94,7 +97,7 @@ export class UsersController {
   async getUserAlreadyExistByUsername(
     @Param('username', GetUserByUsernameValidatePipe) user: IUser,
   ): Promise<UserEntity> {
-    return user;
+    return user
   }
 
   @Put()
@@ -120,16 +123,16 @@ export class UsersController {
     const [err, userUpdated] = await tryit(this.updateUserUseCase.execute)({
       user,
       update: body,
-    });
+    })
     if (err) {
       this.logger.error(
         `Catch on updateUserUseCase: ${JSON.stringify(
           body,
         )}, error: ${err.message ?? JSON.stringify(err)}`,
-      );
+      )
     }
 
-    return userUpdated;
+    return userUpdated
   }
 
   @Roles([UserRoleEnum.ADMIN])
@@ -157,15 +160,15 @@ export class UsersController {
     )({
       username: user.username,
       status: query.status,
-    });
+    })
     if (err) {
       this.logger.error(
         `Catch on updateUserStatusUseCase: ${JSON.stringify(
           query,
         )}, error: ${err.message ?? JSON.stringify(err)}`,
-      );
+      )
     }
 
-    return userUpdated;
+    return userUpdated
   }
 }

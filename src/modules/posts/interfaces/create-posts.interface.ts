@@ -1,8 +1,8 @@
 export interface CreatePostsInterface {
-  title: string;
-  description?: string;
+  title: string
+  description?: string
   user: {
-    userId: string;
-    username: string;
-  };
+    userId: string
+    username: string
+  }
 }
