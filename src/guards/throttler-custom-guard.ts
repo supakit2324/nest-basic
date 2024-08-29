@@ -3,7 +3,7 @@ import { ThrottlerGuard } from '@nestjs/throttler'
 
 @Injectable()
 export class ThrottlerCustomGuard extends ThrottlerGuard {
-  protected getTracker(req: Record<string, any>): string {
-    return req?.headers['x-original-forwarded-for']
+  protected async getTracker(req: Record<string, any>): Promise<string> {
+    return req?.headers['x-original-forwarded-for'] as string
   }
 }
