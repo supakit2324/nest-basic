@@ -1,8 +1,10 @@
-import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { Document } from 'mongoose';
-import { v4 as uuidV4 } from 'uuid';
-import { Users } from '../../users/schemas/users.schema';
-import { PostsStatusEnum } from '../enums/posts-status.enum';
+import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose'
+import { Document } from 'mongoose'
+import { v4 as uuidV4 } from 'uuid'
+
+import { PostsStatusEnum } from '../enums/posts-status.enum'
+
+import { Users } from '../../users/schemas/users.schema'
 
 @Schema({
   collection: 'posts',
@@ -16,35 +18,35 @@ export class Posts extends Document {
     index: true,
     default: () => uuidV4(),
   })
-  objectId?: string;
+  objectId?: string
 
   @Prop({
     type: Object,
     required: true,
   })
-  user: Pick<Users, 'userId' | 'username'>;
+  user: Pick<Users, 'userId' | 'username'>
 
   @Prop({
     type: String,
     index: true,
     required: true,
   })
-  title: string;
+  title: string
 
   @Prop({
     type: String,
     default: null,
   })
-  description?: string;
+  description?: string
 
   @Prop({
     type: String,
     enum: PostsStatusEnum,
     default: PostsStatusEnum.ACTIVE,
   })
-  status?: PostsStatusEnum;
+  status?: PostsStatusEnum
 
-  createdAt?: Date;
-  updatedAt?: Date;
+  createdAt?: Date
+  updatedAt?: Date
 }
-export const postsSchema = SchemaFactory.createForClass(Posts);
+export const postsSchema = SchemaFactory.createForClass(Posts)

@@ -1,8 +1,9 @@
-import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { Document } from 'mongoose';
-import { nanoid } from 'nanoid';
-import { UserRoleEnum } from '../enums/user-role.enum';
-import { UserStatusEnum } from '../enums/user-status.enum';
+import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose'
+import { Document } from 'mongoose'
+import { nanoid } from 'nanoid'
+
+import { UserRoleEnum } from '../enums/user-role.enum'
+import { UserStatusEnum } from '../enums/user-status.enum'
 
 @Schema({
   collection: 'users',
@@ -16,7 +17,7 @@ export class Users extends Document {
     index: true,
     default: () => nanoid(13),
   })
-  userId?: string;
+  userId?: string
 
   @Prop({
     type: String,
@@ -24,29 +25,29 @@ export class Users extends Document {
     index: true,
     required: true,
   })
-  username: string;
+  username: string
 
   @Prop({
     type: String,
     required: true,
   })
-  password: string;
+  password: string
 
   @Prop({
     type: [String],
     enum: UserRoleEnum,
     default: UserRoleEnum.USER,
   })
-  roles?: string[];
+  roles?: string[]
 
   @Prop({
     type: String,
     enum: UserStatusEnum,
     default: UserStatusEnum.ACTIVE,
   })
-  status?: string;
+  status?: string
 
-  createdAt?: Date;
-  updatedAt?: Date;
+  createdAt?: Date
+  updatedAt?: Date
 }
-export const usersSchema = SchemaFactory.createForClass(Users);
+export const usersSchema = SchemaFactory.createForClass(Users)

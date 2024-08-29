@@ -1,5 +1,5 @@
-import { applyDecorators } from '@nestjs/common';
-import { ApiProperty, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { applyDecorators } from '@nestjs/common'
+import { ApiProperty, ApiResponse, ApiTags } from '@nestjs/swagger'
 
 export enum ErrorMessage500 {
   SOMETHING_WRONG = 'something wrong',
@@ -9,14 +9,14 @@ export function CommonResponse(
   tag: string,
   { name, successType, error400 = [], error500 = [] },
 ): any {
-  const messageError500 = [ErrorMessage500.SOMETHING_WRONG];
+  const messageError500 = [ErrorMessage500.SOMETHING_WRONG]
   if (error500.length) {
-    messageError500.push(...error500);
+    messageError500.push(...error500)
   }
 
-  const errorFactory = new ErrorMessageFactory(name);
-  const Error400 = errorFactory.build(400, error400);
-  const Error500 = errorFactory.build(500, messageError500);
+  const errorFactory = new ErrorMessageFactory(name)
+  const Error400 = errorFactory.build(400, error400)
+  const Error500 = errorFactory.build(500, messageError500)
   return applyDecorators(
     ApiTags(tag),
     ApiResponse({
@@ -34,16 +34,16 @@ export function CommonResponse(
       description: 'Internal Error',
       type: Error500,
     }),
-  );
+  )
 }
 
-export default CommonResponse;
+export default CommonResponse
 
 class ErrorMessageFactory {
   constructor(private readonly name: string) {}
 
   build(statusCode: number, msgError = []) {
-    const className = `${this.name}Error${statusCode}`;
+    const className = `${this.name}Error${statusCode}`
     class X {
       @ApiProperty({
         type: String,
@@ -51,11 +51,11 @@ class ErrorMessageFactory {
         example: msgError.at(0),
         enum: msgError,
       })
-      readonly message: string;
+      readonly message: string
     }
 
-    Object.defineProperty(X, 'name', { value: className });
+    Object.defineProperty(X, 'name', { value: className })
 
-    return X;
+    return X
   }
 }

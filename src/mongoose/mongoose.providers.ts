@@ -1,8 +1,9 @@
-import { MongooseModuleAsyncOptions } from '@nestjs/mongoose';
-import { ConfigModule, ConfigService } from '@nestjs/config';
-import { MONGOOSE_CONNECTION_NAME } from '../constants';
-import { Users, usersSchema } from '../modules/users/schemas/users.schema';
-import { Posts, postsSchema } from '../modules/posts/schemas/posts.schema';
+import { ConfigModule, ConfigService } from '@nestjs/config'
+import { MongooseModuleAsyncOptions } from '@nestjs/mongoose'
+
+import { MONGOOSE_CONNECTION_NAME } from '../constants'
+import { Posts, postsSchema } from '../modules/posts/schemas/posts.schema'
+import { Users, usersSchema } from '../modules/users/schemas/users.schema'
 
 export const mongooseModels = [
   {
@@ -13,7 +14,7 @@ export const mongooseModels = [
     name: Posts.name,
     schema: postsSchema,
   },
-];
+]
 
 export const mongooseModuleAsyncOptions: MongooseModuleAsyncOptions = {
   imports: [ConfigModule],
@@ -23,6 +24,6 @@ export const mongooseModuleAsyncOptions: MongooseModuleAsyncOptions = {
     return {
       uri: configService.get<string>('database.host'),
       ...configService.get<any>('database.options'),
-    };
+    }
   },
-};
+}

@@ -1,11 +1,12 @@
-import { ApiProperty } from '@nestjs/swagger';
-import { PostsStatusEnum } from '../enums/posts-status.enum';
+import { ApiProperty } from '@nestjs/swagger'
+
+import { PostsStatusEnum } from '../enums/posts-status.enum'
 
 export class PostsEntity {
   @ApiProperty({
     example: '',
   })
-  objectId?: string;
+  objectId?: string
 
   @ApiProperty({
     example: {
@@ -14,32 +15,32 @@ export class PostsEntity {
     },
   })
   user?: {
-    userId: string;
-    username: string;
-  };
+    userId: string
+    username: string
+  }
 
   @ApiProperty({
     example: 'วันนี้วันอะไร',
   })
-  title?: string;
+  title?: string
 
   @ApiProperty({
     example: '',
   })
-  description?: string;
+  description?: string
 
   @ApiProperty({
     example: PostsStatusEnum.ACTIVE,
   })
-  status?: PostsStatusEnum;
+  status?: PostsStatusEnum
 
   @ApiProperty({
     example: new Date(),
   })
-  createdAt?: Date;
+  createdAt?: Date
 
   @ApiProperty({
     example: new Date(),
   })
-  updatedAt?: Date;
+  updatedAt?: Date
 }

@@ -1,14 +1,16 @@
-import { Module } from '@nestjs/common';
-import { HealthzModule } from '../healthz/healthz.module';
-import { MongooseModule } from '@nestjs/mongoose';
-import { mongooseModuleAsyncOptions } from '../../mongoose/mongoose.providers';
-import { ConfigModule } from '@nestjs/config';
-import configuration from '../../config/configuration';
-import { AuthModule } from '../auth/auth.module';
-import { UsersModule } from '../users/users.module';
-import { PostsModule } from '../posts/posts.module';
-import { ThrottlerModule } from "@nestjs/throttler";
-import { throttlerAsyncOptions } from "../../rate-limit/throttler.providers";
+import { Module } from '@nestjs/common'
+import { ConfigModule } from '@nestjs/config'
+import { MongooseModule } from '@nestjs/mongoose'
+import { ThrottlerModule } from '@nestjs/throttler'
+
+import { AuthModule } from '../auth/auth.module'
+import { HealthzModule } from '../healthz/healthz.module'
+import { PostsModule } from '../posts/posts.module'
+import { UsersModule } from '../users/users.module'
+
+import configuration from '../../config/configuration'
+import { mongooseModuleAsyncOptions } from '../../mongoose/mongoose.providers'
+import { throttlerAsyncOptions } from '../../rate-limit/throttler.providers'
 
 @Module({
   imports: [

@@ -1,3 +1,3 @@
 export class JwtSignInterface {
-  accessToken: string;
+  accessToken: string
 }
