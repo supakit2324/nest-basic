@@ -5,6 +5,8 @@ import {
   Logger,
   Param,
   Post,
+  Put,
+  Query,
   UseGuards,
 } from '@nestjs/common';
 import { CreateUserUseCase } from './use-case/create-user.use-case';
@@ -17,17 +19,25 @@ import { UserEntity } from './entities/user.entity';
 import EError from '../../enums/error.enum';
 import { User } from '../../decorators/user.decorator';
 import { IUser } from './interfaces/user.interface';
-import { ApiBearerAuth, ApiParam } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiBody, ApiParam, ApiQuery } from '@nestjs/swagger';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { GetUserByUsernameValidatePipe } from './pipes/get-user-by-username-validate.pipe';
 import { Roles } from '../../decorators/roles.decorator';
 import { RolesGuard } from '../../guards/roles.guard';
 import { UserRoleEnum } from './enums/user-role.enum';
+import { UpdateUserValidatePipe } from './pipes/update-user-validate.pipe';
+import { UpdateUserUseCase } from './use-case/update-user.use-case';
+import { UpdateUserStatusUseCase } from './use-case/update-user-status.use.case';
+import { UserStatusEnum } from './enums/user-status.enum';
 
 @Controller('users')
 export class UsersController {
   private readonly logger = new Logger(UsersController.name);
-  constructor(private readonly createUserUseCase: CreateUserUseCase) {}
+  constructor(
+    private readonly createUserUseCase: CreateUserUseCase,
+    private readonly updateUserUseCase: UpdateUserUseCase,
+    private readonly updateUserStatusUseCase: UpdateUserStatusUseCase,
+  ) {}
 
   @Post()
   @CommonResponse('Users', {
@@ -85,5 +95,77 @@ export class UsersController {
     @Param('username', GetUserByUsernameValidatePipe) user: IUser,
   ): Promise<UserEntity> {
     return user;
+  }
+
+  @Put()
+  @ApiBearerAuth()
+  @UseGuards(JwtAuthGuard)
+  @CommonResponse('Users', {
+    name: 'update user',
+    successType: UserEntity,
+    error400: [EError.USERNAME_ALREADY_EXIST],
+  })
+  @ApiBody({
+    schema: {
+      type: 'object',
+      properties: {
+        NewUsername: { example: 'ocha777' },
+      },
+    },
+  })
+  async updateUser(
+    @User() user: IUser,
+    @Body(UpdateUserValidatePipe) body: { NewUsername: string },
+  ): Promise<IUser> {
+    const [err, userUpdated] = await tryit(this.updateUserUseCase.execute)({
+      user,
+      update: body,
+    });
+    if (err) {
+      this.logger.error(
+        `Catch on updateUserUseCase: ${JSON.stringify(
+          body,
+        )}, error: ${err.message ?? JSON.stringify(err)}`,
+      );
+    }
+
+    return userUpdated;
+  }
+
+  @Roles([UserRoleEnum.ADMIN])
+  @Put(':username/status')
+  @ApiBearerAuth()
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @CommonResponse('Users', {
+    name: 'update user status',
+    successType: UserEntity,
+    error400: [EError.USERNAME_NOT_FOUND],
+  })
+  @ApiParam({
+    name: 'username',
+  })
+  @ApiQuery({
+    name: 'status',
+    enum: UserStatusEnum,
+  })
+  async updateUserStatus(
+    @Param(GetUserByUsernameValidatePipe) user: IUser,
+    @Query() query: { status: UserStatusEnum },
+  ): Promise<IUser> {
+    const [err, userUpdated] = await tryit(
+      this.updateUserStatusUseCase.execute,
+    )({
+      username: user.username,
+      status: query.status,
+    });
+    if (err) {
+      this.logger.error(
+        `Catch on updateUserStatusUseCase: ${JSON.stringify(
+          query,
+        )}, error: ${err.message ?? JSON.stringify(err)}`,
+      );
+    }
+
+    return userUpdated;
   }
 }
