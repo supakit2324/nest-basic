@@ -24,10 +24,6 @@ describe('AppController (e2e)', () => {
     await app.init()
   })
 
-  afterAll(async () => {
-    await app.close()
-  })
-
   it('/ (GET)', () => {
     return request(app.getHttpServer())
       .get('/healthz')
