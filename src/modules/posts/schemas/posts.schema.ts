@@ -1,7 +1,8 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document } from 'mongoose';
-import { uuid as uuidV4 } from 'uuid';
+import { v4 as uuidV4 } from 'uuid';
 import { Users } from '../../users/schemas/users.schema';
+import { PostsStatusEnum } from '../enums/posts-status.enum';
 
 @Schema({
   collection: 'posts',
@@ -25,6 +26,7 @@ export class Posts extends Document {
 
   @Prop({
     type: String,
+    index: true,
     required: true,
   })
   title: string;
@@ -34,6 +36,13 @@ export class Posts extends Document {
     default: null,
   })
   description?: string;
+
+  @Prop({
+    type: String,
+    enum: PostsStatusEnum,
+    default: PostsStatusEnum.ACTIVE,
+  })
+  status?: PostsStatusEnum;
 
   createdAt?: Date;
   updatedAt?: Date;

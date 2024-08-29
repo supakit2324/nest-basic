@@ -6,6 +6,9 @@ import { ConfigModule } from '@nestjs/config';
 import configuration from '../../config/configuration';
 import { AuthModule } from '../auth/auth.module';
 import { UsersModule } from '../users/users.module';
+import { PostsModule } from '../posts/posts.module';
+import { ThrottlerModule } from "@nestjs/throttler";
+import { throttlerAsyncOptions } from "../../rate-limit/throttler.providers";
 
 @Module({
   imports: [
@@ -14,9 +17,11 @@ import { UsersModule } from '../users/users.module';
       isGlobal: true,
     }),
     MongooseModule.forRootAsync(mongooseModuleAsyncOptions),
+    ThrottlerModule.forRootAsync(throttlerAsyncOptions),
     AuthModule,
     HealthzModule,
     UsersModule,
+    PostsModule,
   ],
 })
 export class AppModule {}
